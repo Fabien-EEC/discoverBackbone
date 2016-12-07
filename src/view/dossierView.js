@@ -13,8 +13,6 @@ App.DossierView = Backbone.View.extend({
         $.ajax({
             url: 'src/template/dossierTemplate.html'
         }).done(function(template){
-            console.log(template);
-            console.log(that.model.get('resultats'));
             that.$el.html(_.template(template)(that.model.get('resultats')));
             $('ul.tabs').tabs();
         });
