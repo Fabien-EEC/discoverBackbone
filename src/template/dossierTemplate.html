@@ -1,11 +1,21 @@
+<%
+var allMembresExceptAssure = _.filter(membres, function(m) {
+    return m.qualite !== 'Assure';
+});
+%>
+
 <article class="dossier">
     <h1>DOSSIER N°<%= Dossier.id %></h1>
 
     <div class="row">
         <div class="col s12">
             <ul class="tabs">
-                <li class="tab col s3"><a class="active" href="#assure">Assuré</a></li>
-                <li class="tab col s3"><a href="#garage">Garage</a></li>
+                <li class="tab col s2"><a class="active" href="#assure">Assuré</a></li>
+                <% if(allMembresExceptAssure != null) { %>
+                    <% _.each(allMembresExceptAssure, function(membre){ %>
+                        <li class="tab col s2"><a href="#<%= membre.qualite %>"><%= membre.qualite %></a></li>
+                    <% }); %>
+                <% } %>
             </ul>
         </div>
         <div id="assure" class="col s12">
@@ -16,15 +26,20 @@
             </ul>
         </div>
 
-        <% var garage = _.where(membres, {qualite: 'Garage'}); %>
-        <% if(garage != null) { %>
-            <div id="garage" class="col s12">
-                <h2>Garage</h2>
-                <ul>
-                    <li>Nom : <%= garage[0].entite.libelle %></li>
-                    <li>Téléphone : <%= Utils.displayTel(garage[0].entite.telephone) %></li>
-                </ul>
-            </div>
+
+        <% if(allMembresExceptAssure != null) { %>
+            <% _.each(allMembresExceptAssure, function(membre){ %>
+                <div id="<%= membre.qualite %>" class="col s12">
+                    <h2><%= membre.qualite %></h2>
+                    <ul>
+                        <% _.each(membre.entite, function(e, i) { %>
+                            <% if(e != null && e != '') { %>
+                                <li><%= i %> : <%= e %></li>
+                            <% } %>
+                        <% }) %>
+                    </ul>
+                </div>
+            <% }); %>
         <% } %>
     </div>
 </article>
