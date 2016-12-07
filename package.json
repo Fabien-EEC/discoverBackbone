@@ -1,0 +1,22 @@
+{
+  "name": "discoverbackbone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fabien-EEC/discoverBackbone.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fabien-EEC/discoverBackbone/issues"
+  },
+  "homepage": "https://github.com/Fabien-EEC/discoverBackbone#readme",
+  "dependencies": {
+    "bower": "^1.8.0"
+  }
+}
