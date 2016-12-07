@@ -7,3 +7,6 @@
 out
 gen
 .gitignore
+node_modules/
+bower_components/
+package.json
