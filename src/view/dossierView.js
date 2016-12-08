@@ -13,10 +13,22 @@ App.DossierView = Backbone.View.extend({
         $.ajax({
             url: 'src/template/dossierTemplate.html'
         }).done(function(template){
+            that.formatMember(that.model.get('resultats').membres);
             that.$el.html(_.template(template)(that.model.get('resultats')));
             $('ul.tabs').tabs();
-        });
 
-        return this;
+            return that;
+        });
+    },
+    formatMember: function (membres) {
+        var templatesName = [];
+        if(membres != null && membres.length) {
+
+            for(var m in membres) {
+                if(m != null && membres[m] != null && membres[m].hasOwnProperty('qualite')) {
+                    templatesName[membres[m].qualite] = membres[m].entite;
+                }
+            }
+        }
     }
 });
