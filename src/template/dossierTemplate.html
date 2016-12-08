@@ -1,11 +1,11 @@
 <%
-var allMembresExceptAssure = _.filter(membres, function(m) {
+var allMembresExceptAssure = _.filter(model.membres, function(m) {
     return m.qualite !== 'Assure';
 });
 %>
 
 <article class="dossier">
-    <h1>DOSSIER N°<%= Dossier.id %></h1>
+    <h1>DOSSIER N°<%= model.Dossier.id %></h1>
 
     <div class="row">
         <div class="col s12">
@@ -21,8 +21,8 @@ var allMembresExceptAssure = _.filter(membres, function(m) {
         <div id="assure" class="col s12">
             <h2>Assuré</h2>
             <ul>
-                <li>Nom et prénom : <%= Assure.entite.nom_prenom %></li>
-                <li>Téléphone : <%= Utils.displayTel(Assure.entite.telephone_portable) %></li>
+                <li>Nom et prénom : <%= model.Assure.entite.nom_prenom %></li>
+                <li>Téléphone : <%= Utils.displayTel(model.Assure.entite.telephone_portable) %></li>
             </ul>
         </div>
 
@@ -41,4 +41,13 @@ var allMembresExceptAssure = _.filter(membres, function(m) {
             <% }); %>
         <% } %>
     </div>
+</article>
+
+<article>
+    <section>
+        <% console.log(templateList); %>
+        <% _.each(templateList, function(t) { %>
+            <%= t %>
+        <% }) %>
+    </section>
 </article>
