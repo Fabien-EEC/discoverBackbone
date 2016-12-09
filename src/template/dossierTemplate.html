@@ -2,6 +2,8 @@
     <h1>DOSSIER N°<%= model.Dossier.id %></h1>
 
     <div class="row">
+
+        <!-- Onglets -->
         <div class="col s12">
             <ul class="tabs">
                 <% if(templateList != null) { %>
@@ -11,6 +13,8 @@
                 <% } %>
             </ul>
         </div>
+
+        <!-- Blocs -->
         <section>
             <% _.each(templateList, function(t) { %>
                 <%= t.html %>

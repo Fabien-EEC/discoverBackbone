@@ -5,8 +5,8 @@
         <li>Complément d'adresse : <%= Assure.entite.adresse.adresse2 %></li>
         <li>Code postal : <%= Assure.entite.adresse.cp %></li>
         <li>E-mail: <%= Assure.entite.email %></li>
-        <li>Téléphone : <%= Assure.entite.email %></li>
-        <li>Mobile  : <%= Assure.entite.email %></li>
-        <li>Fax : <%= Assure.entite.email %></li>
+        <li>Téléphone : <%= Utils.displayTel(Assure.entite.telephone_fixe) %></li>
+        <li>Mobile  : <%= Utils.displayTel(Assure.entite.telephone_portable) %></li>
+        <li>Fax : <%= Assure.entite.fax %></li>
     </ul>
 </article>

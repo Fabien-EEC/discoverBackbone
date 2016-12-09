@@ -39,7 +39,6 @@ App.DossierView = Backbone.View.extend({
                         id: id,
                         html: template
                     });
-                    console.log(templatesLoaded);
                 }, that.model.get('resultats'));
             }
 
