@@ -1,9 +1,9 @@
 App.DossierView = Backbone.View.extend({
 
-    templateList: [
-        'assureTemplate.html',
-        'vehiculeTemplate.html'
-    ],
+    templateList: {
+        'assure': 'assureTemplate.html',
+        'vehicule': 'vehiculeTemplate.html'
+    },
 
     initialize: function () {
         var that = this;
@@ -14,6 +14,10 @@ App.DossierView = Backbone.View.extend({
             }
         });
     },
+
+    /**
+     * Rendu de la page d'un dossier.
+     */
     render: function () {
 
         var that = this,
@@ -22,16 +26,23 @@ App.DossierView = Backbone.View.extend({
             templatesLoaded = [],
             uri = 'src/template/partial/' ;
 
-        this.loadTemplate('src/template/dossierTemplate.html', function (dossierTemplate) {
+        this.loadTemplate('src/template/dossierTemplate.html', function (dossierTemplate)
+        {
+            // Affectation du template
+            t = _.template(dossierTemplate);
 
-            for(var path in that.templateList)
+            for(var id in that.templateList)
             {
-                that.loadTemplate( uri + that.templateList[path], function(template){
-                    templatesLoaded.push(template);
-                    console.log('ici');
+                that.loadTemplate( uri + that.templateList[id], function(template)
+                {
+                    templatesLoaded.push({
+                        id: id,
+                        html: template
+                    });
+                    console.log(templatesLoaded);
                 }, that.model.get('resultats'));
             }
-            t = _.template(dossierTemplate);
+
             html = t({
                 model : that.model.get('resultats'),
                 templateList : templatesLoaded
@@ -40,23 +51,9 @@ App.DossierView = Backbone.View.extend({
             $('ul.tabs').tabs();
         });
     },
-    // formatMember: function (membres) {
-    //     var templatesName = {};
-    //     if(membres != null && membres.length) {
-    //         for(var m in membres) {
-    //             if(m != null && membres[m] != null && membres[m].hasOwnProperty('qualite')) {
-    //                 templatesName[membres[m].qualite] = {
-    //                     data: membres[m].entite,
-    //                     templatePath: 'src/template/partial/' + membres[m].qualite.toLowerCase() + 'Template.html'
-    //                 };
-    //             }
-    //         }
-    //     }
-    //
-    //     console.log(templatesName);
-    // },
 
     /**
+     * Permet de load un fichier de template avec injection de contenu ou non.
      *
      * @param name
      * @param callback

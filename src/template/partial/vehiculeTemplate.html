@@ -1,15 +1,15 @@
-<article>
+<article id="vehicule">
     <ul>
-        <li> Immatriculation : <%= nom_prenom %></li>
-        <li> Numéro de série : <%= nom_prenom %></li>
-        <li> Marque : <%= nom_prenom %></li>
-        <li> Modèle : <%= nom_prenom %></li>
-        <li> Date de mise en circulation : <%= nom_prenom %></li>
-        <li> Année de parution du modèle : <%= nom_prenom %></li>
-        <li> Genre : <%= nom_prenom %></li>
-        <li> Énergie : <%= nom_prenom %></li>
-        <li> Puissance fiscale : <%= nom_prenom %></li>
-        <li> Kilométrage : <%= nom_prenom %></li>
-        <li> Couleur du véhicule : <%= nom_prenom %></li>
+        <li> Immatriculation : <%= Vehicule.immatriculation %></li>
+        <li> Numéro de série : <%= Vehicule.vin %></li>
+        <li> Marque : <%= Vehicule.modele.constructeur.libelle %></li>
+        <li> Modèle : <%= Vehicule.modele.libelle %></li>
+        <li> Date de mise en circulation : <%= Vehicule.date_mise_en_circulation %></li>
+        <li> Année de parution du modèle : <%= Vehicule.modele.annee %></li>
+        <li> Genre : <%= Vehicule.modele.genre.libelle %></li>
+        <li> Énergie : <%= Vehicule.energie.libelle %></li>
+        <li> Puissance fiscale : <%= Vehicule.puissance_fiscale %></li>
+        <li> Kilométrage : <%= Vehicule.kilometrage %></li>
+        <li> Couleur du véhicule : <%= Vehicule.couleur %></li>
     </ul>
 </article>
