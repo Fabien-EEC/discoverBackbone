@@ -19,13 +19,30 @@ App.DossierView = Backbone.View.extend({
      * Rendu de la page d'un dossier.
      */
     render: function () {
+        var datas = this.loadSecondaryTemplate();
+    },
 
-        var that = this;
+    loadSecondaryTemplate: function () {
 
-        this.loadTemplate(this.template, function (dossierTemplate)
-        {
-            that.renderMain(dossierTemplate);
-        });
+        var that = this,
+            uri = 'src/template/partial/',
+            templatesLoaded = [];
+
+        _.chain(this.templateList)
+            .map(function (tmpLoaded, index) {
+                return {
+                    id: index,
+                    promise: that.loadTemplate2(uri + tmpLoaded)
+                }
+            })
+            .map(function (datas) {
+                datas.promise.then(function (value) {
+                    return {
+                        id: datas.id,
+                        html: value(that.model.get('resultats'))
+                    }
+                });
+            });
     },
 
     /**
@@ -73,6 +90,7 @@ App.DossierView = Backbone.View.extend({
      */
     loadTemplate: function (name, callback, inject) {
 
+        var that = this;
         $.ajax({
             url: name,
             async: false
@@ -87,6 +105,20 @@ App.DossierView = Backbone.View.extend({
 
             return that;
         });
-        var that = this;
+
+    },
+
+    loadTemplate2: function (name) {
+        return $.get(name);
+
+        // $.ajax({
+        //     url: name
+        // }).done(function(template){
+        //     if(typeof inject !== 'undefined' && inject != null)
+        //         return  _.template(template)(inject);
+        //     else
+        //         return template;
+        //
+        // });
     }
 });
