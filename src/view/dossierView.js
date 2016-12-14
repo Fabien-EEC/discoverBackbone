@@ -1,5 +1,5 @@
 App.DossierView = Backbone.View.extend({
-
+    template: 'src/template/dossierTemplate.html',
     templateList: {
         'assure': 'assureTemplate.html',
         'vehicule': 'vehiculeTemplate.html'
@@ -20,35 +20,48 @@ App.DossierView = Backbone.View.extend({
      */
     render: function () {
 
-        var that = this,
-            t = null,
+        var that = this;
+
+        this.loadTemplate(this.template, function (dossierTemplate)
+        {
+            that.renderMain(dossierTemplate);
+        });
+    },
+
+    /**
+     *
+     * @param mainTemplate
+     */
+    renderMain: function (mainTemplate) {
+
+        var t = null,
+            that = this,
             html = '',
             templatesLoaded = [],
-            uri = 'src/template/partial/' ;
+            uri = 'src/template/partial/';
 
-        this.loadTemplate('src/template/dossierTemplate.html', function (dossierTemplate)
+        // Affectation du template
+        t = _.template(mainTemplate);
+
+        _.each(this.templateList, function (value, index)
         {
-            // Affectation du template
-            t = _.template(dossierTemplate);
-
-            for(var id in that.templateList)
+            that.loadTemplate( uri + value, function(template)
             {
-                that.loadTemplate( uri + that.templateList[id], function(template)
-                {
-                    templatesLoaded.push({
-                        id: id,
-                        html: template
-                    });
-                }, that.model.get('resultats'));
-            }
-
-            html = t({
-                model : that.model.get('resultats'),
-                templateList : templatesLoaded
-            });
-            that.$el.html(html);
-            $('ul.tabs').tabs();
+                templatesLoaded.push({
+                    id: index,
+                    html: template
+                });
+            }, that.model.get('resultats'));
         });
+
+
+        html = t({
+            model : this.model.get('resultats'),
+            templateList : templatesLoaded
+        });
+
+        this.$el.html(html);
+        $('ul.tabs').tabs();
     },
 
     /**
@@ -59,6 +72,7 @@ App.DossierView = Backbone.View.extend({
      * @param inject
      */
     loadTemplate: function (name, callback, inject) {
+
         $.ajax({
             url: name,
             async: false

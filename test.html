@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.15.0/lodash.min.js"></script>
+<script>
+    var obj = {
+        templateList: {
+            'assure': 'assureTemplate.html',
+            'vehicule': 'vehiculeTemplate.html'
+        },
+        templateList2: {
+            'assure': 'assure2Template.html'
+        }
+    };
+
+    for(var o in obj)
+    {
+//        if(obj.hasOwnProperty(o))
+//        {
+//            console.log('if' + obj[o]);
+//        }
+//        else
+//        {
+        console.log(obj[o].vehicule);
+//        }
+    }
+</script>
+</body>
+</html>
