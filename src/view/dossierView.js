@@ -1,9 +1,12 @@
 App.DossierView = Backbone.View.extend({
+
     template: 'src/template/dossierTemplate.html',
+    uriPartial: 'src/template/partial/',
     templateList: {
         'assure': 'assureTemplate.html',
         'vehicule': 'vehiculeTemplate.html'
     },
+    templatesFilled: [],
 
     initialize: function () {
         var that = this;
@@ -19,106 +22,65 @@ App.DossierView = Backbone.View.extend({
      * Rendu de la page d'un dossier.
      */
     render: function () {
-        var datas = this.loadSecondaryTemplate();
+        this.renderMain();
     },
 
-    loadSecondaryTemplate: function () {
+    /**
+     * Charge les dépendances du fichier JS
+     */
+    renderMain: function () {
 
-        var that = this,
-            uri = 'src/template/partial/',
-            templatesLoaded = [];
+        var uriPartial = 'src/template/partial/',
+            that = this,
+            templatelists = this.templateList,
+            templateMain = this.template;
 
-        _.chain(this.templateList)
-            .map(function (tmpLoaded, index) {
-                return {
-                    id: index,
-                    promise: that.loadTemplate2(uri + tmpLoaded)
-                }
+        this.loadTemplate(uriPartial + templatelists.assure)
+            .then(function (result) {
+                return that.fillTemplate(result, 'assure', uriPartial + templatelists.vehicule);
             })
-            .map(function (datas) {
-                datas.promise.then(function (value) {
-                    return {
-                        id: datas.id,
-                        html: value(that.model.get('resultats'))
-                    }
+            .then(function (result) {
+                return that.fillTemplate(result, 'vehicule', templateMain);
+            })
+            .then(function (main) {
+                var mainTemplateFunc = _.template(main);
+                var html = mainTemplateFunc({
+                    templateList: that.templatesFilled,
+                    model: that.model.get('resultats')
                 });
+                that.$el.html(html);
+                $('ul.tabs').tabs();
             });
     },
 
     /**
+     * Rempli le template depuis les données chargées et télécharge l'url suivante
      *
-     * @param mainTemplate
+     * @param result
+     * @param index
+     * @param next
+     * @return {*}
      */
-    renderMain: function (mainTemplate) {
+    fillTemplate: function (result, index, next) {
 
-        var t = null,
-            that = this,
-            html = '',
-            templatesLoaded = [],
-            uri = 'src/template/partial/';
-
-        // Affectation du template
-        t = _.template(mainTemplate);
-
-        _.each(this.templateList, function (value, index)
-        {
-            that.loadTemplate( uri + value, function(template)
-            {
-                templatesLoaded.push({
-                    id: index,
-                    html: template
-                });
-            }, that.model.get('resultats'));
+        this.templatesFilled.push({
+            id: index,
+            html: _.template(result)(this.model.get('resultats'))
         });
 
+        if(typeof next === "undefined")
+            return '';
 
-        html = t({
-            model : this.model.get('resultats'),
-            templateList : templatesLoaded
-        });
-
-        this.$el.html(html);
-        $('ul.tabs').tabs();
+        return this.loadTemplate(next);
     },
 
     /**
-     * Permet de load un fichier de template avec injection de contenu ou non.
+     * Chargement du template depuis son URI
      *
      * @param name
-     * @param callback
-     * @param inject
+     * @return jqXHR
      */
-    loadTemplate: function (name, callback, inject) {
-
-        var that = this;
-        $.ajax({
-            url: name,
-            async: false
-        }).done(function(template){
-            if(typeof inject !== 'undefined' && inject != null)
-            {
-                var datas = _.template(template)(inject);
-                callback(datas);
-            }
-            else
-                callback(template);
-
-            return that;
-        });
-
-    },
-
-    loadTemplate2: function (name) {
+    loadTemplate: function (name) {
         return $.get(name);
-
-        // $.ajax({
-        //     url: name
-        // }).done(function(template){
-        //     if(typeof inject !== 'undefined' && inject != null)
-        //         return  _.template(template)(inject);
-        //     else
-        //         return template;
-        //
-        // });
     }
 });
